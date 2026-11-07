@@ -1,0 +1,19 @@
+[project]
+name = "protein-blender-mcp"
+version = "0.1.0"
+description = "MCP server for styling protein 3D structures in Blender (via Molecular Nodes) using plain English"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = ["mcp>=1.2.0"]
+keywords = ["mcp", "blender", "protein", "pdb", "molecular-nodes", "structural-biology"]
+
+[project.scripts]
+protein-blender-mcp = "protein_blender_mcp.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/protein_blender_mcp"]

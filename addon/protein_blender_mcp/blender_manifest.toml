@@ -1,0 +1,19 @@
+schema_version = "1.0.0"
+
+id = "protein_blender_mcp"
+version = "0.1.0"
+name = "Protein Blender MCP"
+tagline = "Style protein structures in plain English through an MCP server"
+maintainer = "Omar Arias-Gaguancela"
+type = "add-on"
+website = "https://github.com/OmarArias-Gaguancela/protein-blender-mcp"
+
+tags = ["Import-Export", "Scene"]
+
+blender_version_min = "4.2.0"
+
+license = ["SPDX:MIT"]
+
+[permissions]
+network = "Listens on localhost so the MCP server can send styling commands"
+files = "Reads structure files and writes rendered images"
