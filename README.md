@@ -33,6 +33,15 @@ You ──► Claude ──► protein-blender-mcp (MCP server) ──TCP:9877�
 ### 1. Install the Blender add-on
 
 1. Download this repository and zip the `addon/protein_blender_mcp` folder, or run `python scripts/build_addon.py`, which writes `dist/protein_blender_mcp.zip`.
+
+   > **Close every other Blender window before installing or updating any extension.** Installing an extension makes Blender re-sync the shared Python packages used by all extensions, including Molecular Nodes' scipy, pandas and MDAnalysis. On Windows, a second running Blender keeps those files locked, so they get removed but not restored. Molecular Nodes then fails with errors like `No module named 'databpy'`. If that happens, close all Blender windows and install the zip again; the re-sync restores everything.
+
+   You can also install from the command line (with Blender closed):
+
+   ```bash
+   blender --command extension install-file -r user_default -e dist/protein_blender_mcp.zip
+   ```
+
 2. In Blender, open **Edit → Preferences → Get Extensions**, click the **⌄** menu in the top right, and choose **Install from Disk…**. Select the zip.
 3. In the 3D viewport, press **N**, open the **Protein MCP** tab, and click **Start MCP Bridge**.
 
@@ -66,6 +75,30 @@ pip install -e .
 Then use `protein-blender-mcp` as the command.
 
 Set `PROTEIN_BLENDER_PORT` if you changed the port in the Blender panel.
+
+#### Windows: Claude desktop app and uv
+
+The Claude desktop app on Windows redirects files that programs it launches write under `AppData` into its own private folder. That breaks the folder links uv creates when it downloads a Python, giving errors like:
+
+```
+error: Missing expected target directory for Python minor version link at
+`C:\Users\<you>\AppData\Roaming\uv\python\cpython-3.13...`
+```
+
+To fix it, store uv's Pythons outside `AppData` with `UV_PYTHON_INSTALL_DIR`, and pin Python 3.13:
+
+```bash
+claude mcp add --scope user protein-blender -e UV_PYTHON_INSTALL_DIR=C:\Users\<you>\.uv\python -- uvx --python 3.13 --from git+https://github.com/OmarArias-Gaguancela/protein-blender-mcp protein-blender-mcp
+```
+
+For Claude Desktop, add the same thing to the server entry:
+
+```json
+"env": { "UV_PYTHON_INSTALL_DIR": "C:\\Users\\<you>\\.uv\\python" },
+"args": ["--python", "3.13", "--from", "git+https://github.com/OmarArias-Gaguancela/protein-blender-mcp", "protein-blender-mcp"]
+```
+
+When you run `claude mcp add` from Windows PowerShell 5.1, PowerShell drops the `--` separator and you get `unknown option '--python'`. Run the command from Git Bash, cmd, or PowerShell 7 instead.
 
 ## Example prompts
 
